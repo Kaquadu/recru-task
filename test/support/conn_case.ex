@@ -23,6 +23,7 @@ defmodule PragueParkWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import PragueParkWeb.ConnCase
+      import PragueParkWeb.Router.Helpers
 
       alias PragueParkWeb.Router.Helpers, as: Routes
 
