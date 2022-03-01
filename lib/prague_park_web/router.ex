@@ -7,5 +7,7 @@ defmodule PragueParkWeb.Router do
 
   scope "/api", PragueParkWeb do
     pipe_through :api
+
+    post "/parkings/:id", ParkingsController, :update_refresh_period
   end
 end
