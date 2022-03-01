@@ -4,7 +4,7 @@ defmodule PraguePark.Repo do
     adapter: Ecto.Adapters.Postgres
 
   def fetch(query) do
-    case @repo.one(query) do
+    case __MODULE__.one(query) do
       nil -> {:error, :not_found}
       result -> {:ok, result}
     end
