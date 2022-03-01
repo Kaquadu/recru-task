@@ -9,3 +9,15 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias PraguePark.Parkings.Place
+
+resources = [
+  %{spot_id: "534013", refresh_period: 5}
+]
+
+for resource <- resources do
+  %Place{}
+  |> Place.changeset(resource)
+  |> PraguePark.Repo.insert()
+end
