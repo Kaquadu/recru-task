@@ -5,10 +5,10 @@ defmodule PragueParkWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", PragueParkWeb do
+  scope "/", PragueParkWeb do
     pipe_through :api
 
-    post "/parkings/:id", ParkingsController, :update_refresh_period
+    post "/crawlers/:id", ParkingsController, :update_refresh_period
 
     get "/parkings/:id", ParkingStatisticsController, :get_occupancy
   end
