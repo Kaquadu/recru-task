@@ -11,13 +11,20 @@
 # and so on) as they will fail if something goes wrong.
 
 alias PraguePark.Parkings.Place
+alias PraguePark.ParkingStatistics.Occupancy
 
 resources = [
   %{spot_id: "534013", refresh_period: 5}
 ]
 
 for resource <- resources do
-  %Place{}
-  |> Place.changeset(resource)
-  |> PraguePark.Repo.insert()
+  {:ok, place} =
+    %Place{}
+    |> Place.changeset(resource)
+    |> PraguePark.Repo.insert()
+
+  {:ok, _occupancy} =
+    %Occupancy{}
+    |> Occupancy.changeset(%{place_id: place.id})
+    |> PraguePark.Repo.insert()
 end

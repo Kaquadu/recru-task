@@ -110,4 +110,61 @@ defmodule PraguePark.PrakingStatisticsTest do
                ParkingStatistics.get_last_place_occupancy(Ecto.UUID.generate())
     end
   end
+
+  describe "update_occupancies/0" do
+    test "launches processes to update occupancies" do
+      spot_id = "534013"
+      resource_params = %{spot_id: spot_id, refresh_period: 5}
+
+      {:ok, place} =
+        %Parkings.Place{}
+        |> Parkings.Place.changeset(resource_params)
+        |> PraguePark.Repo.insert()
+
+      past_time =
+        Timex.now()
+        |> Timex.shift(minutes: -6)
+        |> Timex.to_datetime()
+        |> DateTime.truncate(:second)
+
+      Repo.insert_all(
+        Occupancy,
+        [
+          %{
+            place_id: place.id,
+            taken_places: 10,
+            total_places: 57,
+            updated_at: past_time,
+            inserted_at: past_time
+          }
+        ]
+      )
+
+      url = "http://private-b2c96-mojeprahaapi.apiary-mock.com/pr-parkings/#{spot_id}"
+
+      body =
+        "{\n    \"type\": \"Feature\",\n    \"geometry\": {\n        \"type\": \"Point\",\n        \"coordinates\": [14.350451, 50.05053]\n    },\n    \"properties\": {\n        \"id\": 534013,\n        \"last_updated\": 1502178725000,\n        \"name\": \"Nové Butovice\",\n        \"num_of_taken_places\": 0,\n        \"num_of_total_places\": 57,\n        \"total_num_of_places\": 57,\n        \"pr\": true,\n        \"district\": \"praha-13\",\n        \"address\": \"Seydlerova 2152/1, Stodůlky, 158 00 Praha-Praha 13, Česko\"\n    }\n}"
+
+      with_mock(:hackney, request: fn :get, ^url, _, _, _ -> {:ok, 200, [], body} end) do
+        assert tasks_list = ParkingStatistics.update_occupancies()
+        assert [{:ok, _task_id}] = tasks_list
+      end
+    end
+
+    test "doesn't update fresh occupancies" do
+      spot_id = "534013"
+      resource_params = %{spot_id: spot_id, refresh_period: 5}
+
+      {:ok, place} =
+        %Parkings.Place{}
+        |> Parkings.Place.changeset(resource_params)
+        |> PraguePark.Repo.insert()
+
+      %Occupancy{}
+      |> Occupancy.changeset(%{place_id: place.id, taken_places: 10, total_places: 57})
+      |> Repo.insert!()
+
+      assert [] = ParkingStatistics.update_occupancies()
+    end
+  end
 end

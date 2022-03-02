@@ -15,9 +15,11 @@ defmodule PraguePark.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: PraguePark.PubSub},
       # Start the Endpoint (http/https)
-      PragueParkWeb.Endpoint
+      PragueParkWeb.Endpoint,
       # Start a worker by calling: PraguePark.Worker.start_link(arg)
       # {PraguePark.Worker, arg}
+      # Quantum scheduler
+      PraguePark.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
