@@ -21,10 +21,7 @@ defmodule PragueParkWeb.ParkingsControllerTest do
     } do
       update_period = 10
 
-      assert %{
-               "refresh_period" => ^update_period,
-               "spot_id" => ^spot_id
-             } =
+      assert %{"place" => %{"refresh_period" => ^update_period, "spot_id" => ^spot_id}} =
                conn
                |> post(parkings_path(conn, :update_refresh_period, spot_id), %{
                  "refresh_period" => update_period
@@ -35,7 +32,7 @@ defmodule PragueParkWeb.ParkingsControllerTest do
     test "with invalid spot id returns 404", %{conn: conn} do
       assert %{} =
                conn
-               |> post(parkings_path(conn, :update_refresh_period, "111111"), %{
+               |> post(parkings_path(conn, :update_refresh_period, Ecto.UUID.generate()), %{
                  "refresh_period" => 5
                })
                |> json_response(404)
@@ -69,14 +66,11 @@ defmodule PragueParkWeb.ParkingsControllerTest do
     } do
       update_period = 10
 
-      assert %{
-               "refresh_period" => ^update_period,
-               "spot_id" => ^spot_id
-             } =
+      assert %{"place" => %{"refresh_period" => ^update_period, "spot_id" => ^spot_id}} =
                conn
                |> post(parkings_path(conn, :update_refresh_period, spot_id), %{
                  "refresh_period" => update_period,
-                 "spot_id" => "11111"
+                 "spot_id" => Ecto.UUID.generate()
                })
                |> json_response(200)
     end

@@ -5,6 +5,12 @@ defmodule PraguePark.Parkings do
 
   @repo PraguePark.Repo
 
+  def create_place(params) do
+    %Place{}
+    |> Place.changeset(params)
+    |> @repo.insert()
+  end
+
   def update_place_refresh_period(spot_id, params) do
     with {:ok, place} <- get_place_by_spot_id(spot_id),
          %{valid?: true} = changeset <-
@@ -19,9 +25,7 @@ defmodule PraguePark.Parkings do
     end
   end
 
-  ###
-
-  defp get_place_by_spot_id(spot_id) do
+  def get_place_by_spot_id(spot_id) do
     Place
     |> where([p], p.spot_id == ^spot_id)
     |> @repo.fetch()

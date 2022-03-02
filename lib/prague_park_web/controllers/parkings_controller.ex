@@ -10,7 +10,7 @@ defmodule PragueParkWeb.ParkingsController do
       {:ok, place} ->
         conn
         |> put_status(:ok)
-        |> render("place.json", place: place)
+        |> render("refresh.json", place: place)
 
       error ->
         error

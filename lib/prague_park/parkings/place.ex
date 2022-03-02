@@ -5,7 +5,7 @@ defmodule PraguePark.Parkings.Place do
 
   schema "places" do
     field :spot_id, :string
-    field :refresh_period, :integer
+    field :refresh_period, :integer, default: 5
 
     timestamps()
   end
