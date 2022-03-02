@@ -26,6 +26,7 @@ defmodule PragueParkWeb.ConnCase do
       import PragueParkWeb.Router.Helpers
 
       alias PragueParkWeb.Router.Helpers, as: Routes
+      alias PraguePark.Repo
 
       # The default endpoint for testing
       @endpoint PragueParkWeb.Endpoint

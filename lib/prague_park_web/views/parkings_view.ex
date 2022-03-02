@@ -1,7 +1,7 @@
 defmodule PragueParkWeb.ParkingsView do
   use PragueParkWeb, :view
 
-  def render("update.json", %{place: place}) do
+  def render("refresh.json", %{place: place}) do
     %{
       place:
         render_one(
