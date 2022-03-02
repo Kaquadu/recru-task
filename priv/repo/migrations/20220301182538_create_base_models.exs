@@ -17,7 +17,7 @@ defmodule PraguePark.Repo.Migrations.CreateBaseModels do
       add :total_places, :integer
       add :taken_places, :integer
 
-      add :place_id, references("places", type: :uuid)
+      add :place_id, references("places", type: :uuid, on_delete: :delete_all), null: false
 
       timestamps()
     end

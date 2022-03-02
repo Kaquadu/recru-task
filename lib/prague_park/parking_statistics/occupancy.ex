@@ -1,7 +1,8 @@
 defmodule PraguePark.ParkingStatistics.Occupancy do
   use PraguePark.Schema
 
-  @required_fields ~w(place_id taken_places total_places)a
+  @required_fields ~w(place_id)a
+  @optional_fields ~w(taken_places total_places)a
 
   schema "occupancies" do
     field :taken_places, :integer
@@ -14,7 +15,7 @@ defmodule PraguePark.ParkingStatistics.Occupancy do
 
   def changeset(place, attrs \\ %{}) do
     place
-    |> cast(attrs, @required_fields)
+    |> cast(attrs, @required_fields ++ @optional_fields)
     |> unique_constraint(:place_id)
     |> validate_required(@required_fields)
   end

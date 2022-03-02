@@ -29,6 +29,12 @@ config :phoenix, :json_library, Jason
 config :prague_park,
   endpoint_url: "http://private-b2c96-mojeprahaapi.apiary-mock.com/pr-parkings/"
 
+# Quantum scheduler config
+config :prague_park, PraguePark.Scheduler,
+  jobs: [
+    {"* * * * *", {PraguePark.ParkingStatistics, :update_occupancies, []}}
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
